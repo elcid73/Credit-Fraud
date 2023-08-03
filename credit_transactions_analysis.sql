@@ -33,6 +33,17 @@ WHERE transaction_date::time(0) > '09:00:00'
 ORDER BY transactions.transaction_amount DESC
 LIMIT 100;
 
+-- Merchant transactions data
+CREATE VIEW transactions_by_merchant AS
+SELECT merchant.merchant_name, Sum(transactions.transaction_amount) AS total_amount, Avg(transactions.transaction_amount) AS average_amount
+FROM transactions JOIN merchant ON transactions.merchant_id = merchant.merchant_id
+GROUP BY merchant.merchant_name
+ORDER BY Avg(transactions.transaction_amount) DESC;
+
+
+
+
+
 -- Cardholders' Id 2 and 18 data
 SELECT credit_card.cardholder_id, transactions.transaction_date, transactions.transaction_amount
 FROM transactions JOIN credit_card ON transactions.card_id = credit_card.card_id
